@@ -1,22 +1,34 @@
-import React, { useState, MouseEvent } from "react";
+import React, { useState, MouseEvent, useRef } from "react";
+
 import "./SpinButton.css";
 
 const SpinButton: React.FC = () => {
   const [count, setCount] = useState<number>(0);
   const [isTooltipVisible, setIsTooltipVisible] = useState<boolean>(false);
 
+  const countLiveRegionRef = useRef<HTMLDivElement>(null); // 이 줄을 추가하세요
+
   const increment = () => {
     setCount((prevCount) => prevCount + 1);
+    announceLiveRegion(`성인 ${count + 1} 텍스트 숫자만 수정`);
   };
 
   const decrement = () => {
     setCount((prevCount) => prevCount - 1);
+    announceLiveRegion(`성인 ${count - 1} 텍스트 숫자만 수정`);
+  };
+
+  const announceLiveRegion = (message: string) => {
+    if (countLiveRegionRef.current) {
+      countLiveRegionRef.current.innerText = message;
+    }
   };
 
   const toggleTooltip = (event: MouseEvent<HTMLDivElement>) => {
     setIsTooltipVisible(!isTooltipVisible);
   };
 
+  // return 구문 안에 추가하세요
   return (
     <section className="spinButtonContainer">
       <div>
@@ -34,9 +46,29 @@ const SpinButton: React.FC = () => {
             )}
           </div>
         </div>
-        <button onClick={decrement} className="spinButton">
+        <button
+          onClick={decrement}
+          className="spinButton"
+          aria-label="성인 탑승자 한명 줄이기 버튼"
+        >
           -
         </button>
+        <div
+          ref={countLiveRegionRef}
+          aria-live="assertive"
+          className="sr-only"
+          style={{
+            position: "absolute",
+            overflow: "hidden",
+            clip: "rect(0, 0, 0, 0)",
+            width: "1px",
+            height: "1px",
+            margin: "-1px",
+            padding: "0",
+            border: "0",
+          }}
+        />
+
         <input
           type="text"
           role="spinbutton"
@@ -44,7 +76,11 @@ const SpinButton: React.FC = () => {
           className="spinButtonInput"
           value={count}
         />
-        <button onClick={increment} className="spinButton">
+        <button
+          onClick={increment}
+          className="spinButton"
+          aria-label="성인 탑승자 한명 증가 버튼"
+        >
           +
         </button>
       </div>
