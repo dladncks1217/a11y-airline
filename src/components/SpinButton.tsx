@@ -10,12 +10,12 @@ const SpinButton: React.FC = () => {
 
   const increment = () => {
     setCount((prevCount) => prevCount + 1);
-    announceLiveRegion(`성인 ${count + 1} 텍스트 숫자만 수정`);
+    announceLiveRegion(`성인 ${count + 1}`);
   };
 
   const decrement = () => {
     setCount((prevCount) => prevCount - 1);
-    announceLiveRegion(`성인 ${count - 1} 텍스트 숫자만 수정`);
+    announceLiveRegion(`성인 ${count - 1}`);
   };
 
   const announceLiveRegion = (message: string) => {
@@ -75,6 +75,7 @@ const SpinButton: React.FC = () => {
           readOnly
           className="spinButtonInput"
           value={count}
+          aria-label="성인"
         />
         <button
           onClick={increment}
